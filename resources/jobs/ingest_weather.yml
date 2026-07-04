@@ -1,0 +1,9 @@
+resources:
+  jobs:
+    ingest_weather:
+      name: ingest_weather
+
+      tasks:
+        - task_key: ingest_weather_task
+          notebook_task:
+            notebook_path: ./notebooks/ingest_weather
