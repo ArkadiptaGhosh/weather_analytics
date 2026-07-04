@@ -21,5 +21,4 @@ class WeatherClient:
                                      params = params)
         
         if requests.status_codes == 200 :
-            print("Request successful!")
             return response.json()
