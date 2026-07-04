@@ -1,6 +1,9 @@
+from datetime import datetime
+from pathlib import Path
+
 from weather_analytics.api.weather_client import WeatherClient
+from weather_analytics.config.config import BRONZE_DIRECTORY
 from weather_analytics.storage.file_manager import FileManager
-from weather_analytics.config.config import BRONZE_FILE_PATH
 
 
 def main():
@@ -11,7 +14,13 @@ def main():
 
     weather = client.get_current_weather()
 
-    file_manager.save_json(weather, BRONZE_FILE_PATH)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    file_name = f"weather_{timestamp}.json"
+
+    file_path = Path(BRONZE_DIRECTORY) / file_name
+
+    file_manager.save_json(weather, str(file_path))
 
 
 if __name__ == "__main__":
