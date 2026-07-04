@@ -4,10 +4,14 @@ from weather_analytics.storage.file_manager import FileManager
 
 def main():
 
-    """Apllication entry point."""
+    """Application entry point."""
+
     client = WeatherClient()
+    file_manager = FileManager()
+
+
     weather = client.get_current_weather()
-    FileManager.save_json(weather,"data/bronze/weather.json")
+    file_manager.save_json(weather, "data/bronze/weather.json")
 
 
 if __name__ == "__main__":

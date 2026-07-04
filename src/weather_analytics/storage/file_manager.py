@@ -1,13 +1,20 @@
 import json
+from pathlib import Path
+
 
 class FileManager:
-    """Handles file read and write operations"""
-    
+    """Handles file read and write operations."""
+
     def __init__(self):
-        """initialize the File Manager"""
+        """Initialize the File Manager."""
 
-    def save_json(self,data,file_path):
+    def save_json(self, data, file_path):
+        """Save JSON data to a file."""
 
-        """Save JSON data to a file"""
-        with open(file_path,"w") as file:
-            json.dump(data,file,indent=4)
+        path = Path(file_path)
+
+        # Create the parent directory if it doesn't exist
+        path.parent.mkdir(parents=True, exist_ok=True)
+
+        with path.open("w") as file:
+            json.dump(data, file, indent=4)
