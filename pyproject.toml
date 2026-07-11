@@ -11,6 +11,9 @@ dependencies = [
     "requests (>=2.34.2,<3.0.0)"
 ]
 
+[project.scripts]
+weather-main = "weather_analytics.main:main"
+
 [tool.poetry]
 packages = [{include = "weather_analytics", from = "src"}]
 
