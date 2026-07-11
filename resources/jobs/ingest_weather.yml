@@ -1,9 +1,20 @@
 resources:
   jobs:
-    ingest_weather:
-      name: ingest_weather
+    weather_analytics_job:
+      name: weather_analytics_job
 
       tasks:
-        - task_key: ingest_weather_task
-          notebook_task:
-            notebook_path: ./notebooks/ingest_weather
+        - task_key: weather_ingestion
+
+          python_wheel_task:
+            package_name: weather_analytics
+            entry_point: weather-main
+
+          environment_key: weather_environment
+
+      environments:
+        - environment_key: weather_environment
+          spec:
+            dependencies:
+              - ../../dist/weather_analytics-0.1.0-py3-none-any.whl
+            environment_version: "4"
