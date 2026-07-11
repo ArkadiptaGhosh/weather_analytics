@@ -22,6 +22,8 @@ def main():
 
     file_manager.save_json(weather, str(file_path))
 
+    print(f"Weather data saved to {file_path}")
+
 
 if __name__ == "__main__":
     main()

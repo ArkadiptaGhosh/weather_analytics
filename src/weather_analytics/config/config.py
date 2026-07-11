@@ -1,3 +1,3 @@
 """Application configuration."""
 
-BRONZE_DIRECTORY = "data/bronze"
+BRONZE_DIRECTORY = "/Workspace/Users/arkadiptaghosh81@gmail.com/.bundle/weather_analytics/data/bronze"
