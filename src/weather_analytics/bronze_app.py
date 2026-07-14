@@ -70,7 +70,7 @@ def main():
     bronze_df.write \
         .format("delta") \
         .mode("append") \
-        .option("overwriteSchema", "true") \
+        .option("mergeSchema", "true") \
         .saveAsTable(
             "weather_analytics.bronze.weather_raw"
         )
