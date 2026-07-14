@@ -4,11 +4,20 @@ resources:
       name: weather_analytics_job
 
       tasks:
-        - task_key: weather_ingestion
+        - task_key: bronze_ingestion
+          python_wheel_task:
+            package_name: weather_analytics
+            entry_point: weather-bronze
+
+          environment_key: weather_environment
+
+        - task_key: silver_processing
+          depends_on:
+            - task_key: bronze_ingestion
 
           python_wheel_task:
             package_name: weather_analytics
-            entry_point: weather-main
+            entry_point: weather-silver
 
           environment_key: weather_environment
 
