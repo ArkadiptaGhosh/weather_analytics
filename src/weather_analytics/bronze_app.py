@@ -45,23 +45,6 @@ def main():
         bronze_records.append(bronze_data)
 
     # ---------------------------------------------------------
-    # Temporary local JSON backup
-    # ---------------------------------------------------------
-
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-    file_name = f"weather_{timestamp}.json"
-
-    file_path_bronze = Path(BRONZE_DIRECTORY) / file_name
-
-    file_manager.save_json(
-        bronze_records,
-        str(file_path_bronze)
-    )
-
-    print(f"Bronze JSON saved to {file_path_bronze}")
-
-    # ---------------------------------------------------------
     # Write to Bronze Delta table
     # ---------------------------------------------------------
 
