@@ -9,13 +9,22 @@ class WeatherClient:
 
         self.base_url = "https://api.open-meteo.com/v1/forecast"
 
-    def get_current_weather(self):
-        """Fetch the current weather."""
+    def get_current_weather(
+        self,
+        city: str,
+        latitude: float,
+        longitude: float
+    ) -> dict:
+        """Fetch the current weather for a location."""
 
         params = {
-            "latitude": 22.57,
-            "longitude": 88.36,
-            "current": "temperature_2m"
+            "latitude": latitude,
+            "longitude": longitude,
+            "current": [
+                "temperature_2m",
+                "relative_humidity_2m",
+                "wind_speed_10m"
+            ]
         }
 
         response = requests.get(
@@ -24,7 +33,11 @@ class WeatherClient:
         )
 
         if response.status_code == 200:
-            return response.json()
+            weather_data = response.json()
+
+            weather_data["city"] = city
+
+            return weather_data
 
         raise Exception(
             f"Weather API request failed with status code {response.status_code}"
