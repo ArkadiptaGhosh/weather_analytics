@@ -1,25 +1,70 @@
+from datetime import datetime, timezone
+
+
 class SilverProcessor:
+    def process(
+        self,
+        weather_data: dict
+    ) -> dict:
+        """Transform bronze weather record into silver record."""
 
-    """Add ingesestion metadata to the weather data."""
-
-    def process(self, weather_data: dict) -> dict:
+        current = weather_data.get(
+            "current",
+            {}
+        )
 
         return {
-            "latitude": weather_data.get("latitude"),
-            "longitude": weather_data.get("longitude"),
-            "temperature": (
-                weather_data.get("current", {})
-                           .get("temperature_2m")
+            "city": weather_data.get(
+                "city"
             ),
-            "weather_time": (
-                weather_data.get("current", {})
-                           .get("time")
+
+            "latitude": float(
+                weather_data.get(
+                    "latitude"
+                )
             ),
-            "timezone": weather_data.get("timezone"),
-            "ingestion_timestamp": (
-                weather_data.get("ingestion_timestamp")
+
+            "longitude": float(
+                weather_data.get(
+                    "longitude"
+                )
             ),
-            "source_system": (
-                weather_data.get("source_system")
-            )
+
+            "temperature": float(
+                current.get(
+                    "temperature_2m"
+                )
+            ),
+
+            "humidity": int(
+                current.get(
+                    "relative_humidity_2m"
+                )
+            ),
+
+            "wind_speed": float(
+                current.get(
+                    "wind_speed_10m"
+                )
+            ),
+
+            "weather_time": current.get(
+                "time"
+            ),
+
+            "timezone": weather_data.get(
+                "timezone"
+            ),
+
+            "ingestion_timestamp": weather_data.get(
+                "ingestion_timestamp"
+            ),
+
+            "ingestion_source": weather_data.get(
+                "ingestion_source"
+            ),
+            "silver_processed_timestamp": (
+                datetime.now(
+                timezone.utc).isoformat()
+),
         }

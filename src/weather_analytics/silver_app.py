@@ -1,36 +1,61 @@
-from datetime import datetime
-from pathlib import Path
+from pyspark.sql import SparkSession
 
-from weather_analytics.api.weather_client import WeatherClient
-from weather_analytics.processing.bronze_processor import BronzeProcessor
+from weather_analytics.processing.silver_processor import (
+    SilverProcessor
+)
+
 
 def main():
-    """Application entry point."""
+    """Silver transformation pipeline."""
 
-    print("Silver pipeline started")    
+    print("Starting silver pipeline...")
 
-    # client = WeatherClient()
-    # file_manager = FileManager()
+    spark = SparkSession.getActiveSession()
 
-    # weather = client.get_current_weather()
+    if spark is None:
+        spark = SparkSession.builder.getOrCreate()
 
-    # bronze_processor = BronzeProcessor()
-    # silver_processor = SilverProcessor()
+    silver_processor = SilverProcessor()
 
-    # bronze_data = bronze_processor.process(weather)
-    # silver_data = silver_processor.process(bronze_data)
+    bronze_df = spark.read.table(
+        "weather_analytics.bronze.weather_raw"
+    )
 
-    # timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    bronze_rows = bronze_df.collect()
 
-    # file_name = f"weather_{timestamp}.json"
+    silver_records = []
 
-    # file_path_bronze = Path(BRONZE_DIRECTORY) / file_name
-    # file_path_silver = Path(SILVER_DIRECTORY) / file_name
+    for row in bronze_rows:
 
-    # file_manager.save_json(bronze_data, str(file_path_bronze))
-    # file_manager.save_json(silver_data, str(file_path_silver))
+        silver_record = silver_processor.process(
+            row.asDict(
+                recursive=True
+            )
+        )
 
-    # print(f"Weather data saved to {file_path_bronze} and {file_path_silver}")
+        silver_records.append(
+            silver_record
+        )
+
+    silver_df = spark.createDataFrame(
+        silver_records
+    )
+
+    silver_df.write \
+        .format("delta") \
+        .mode("append") \
+        .option(
+            "mergeSchema",
+            "true"
+        ) \
+        .saveAsTable(
+            "weather_analytics.silver.weather_curated"
+        )
+
+    print(
+        "Silver data written to "
+        "weather_analytics.silver.weather_curated"
+    )
 
 
 if __name__ == "__main__":

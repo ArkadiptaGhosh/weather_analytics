@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS weather_analytics.silver.weather_curated (
     weather_time TIMESTAMP,
     timezone STRING,
     ingestion_timestamp TIMESTAMP,
+    silver_processed_timestamp TIMESTAMP,
     ingestion_source STRING
 )
 USING DELTA;
