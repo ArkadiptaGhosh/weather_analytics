@@ -8,8 +8,8 @@ workspace:
   host: https://dbc-b1a7c3fe-a880.cloud.databricks.com
 
 targets:
-  dev:
-    mode: development
+  prod:
+    mode: production
     default: true
     workspace:
       root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
