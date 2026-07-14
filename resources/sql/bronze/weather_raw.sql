@@ -1,12 +1,15 @@
-SELECT
-    city,
-    latitude,
-    longitude,
-    CAST(current['temperature_2m'] AS DOUBLE) AS temperature,
-    CAST(current['relative_humidity_2m'] AS INT) AS humidity,
-    CAST(current['wind_speed_10m'] AS DOUBLE) AS wind_speed,
-    TO_TIMESTAMP(current['time']) AS weather_time,
-    timezone,
-    TO_TIMESTAMP(ingestion_timestamp) AS ingestion_timestamp,
-    ingestion_source
-FROM weather_analytics.bronze.weather_raw
+CREATE TABLE IF NOT EXISTS weather_analytics.bronze.weather_raw (
+    city STRING,
+    current MAP<STRING, STRING>,
+    current_units MAP<STRING, STRING>,
+    elevation DOUBLE,
+    generationtime_ms DOUBLE,
+    ingestion_source STRING,
+    ingestion_timestamp STRING,
+    latitude DOUBLE,
+    longitude DOUBLE,
+    timezone STRING,
+    timezone_abbreviation STRING,
+    utc_offset_seconds BIGINT
+)
+USING DELTA;
