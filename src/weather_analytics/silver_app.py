@@ -2,9 +2,6 @@ from datetime import datetime
 from pathlib import Path
 
 from weather_analytics.api.weather_client import WeatherClient
-from weather_analytics.config.config import BRONZE_DIRECTORY
-from weather_analytics.config.config import SILVER_DIRECTORY
-# from weather_analytics.storage.file_manager import FileManager
 from weather_analytics.processing.bronze_processor import BronzeProcessor
 
 def main():
