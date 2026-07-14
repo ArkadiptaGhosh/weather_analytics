@@ -23,11 +23,26 @@ def main():
     file_manager = FileManager()
     bronze_processor = BronzeProcessor()
 
-    # Fetch weather data from API
-    weather = client.get_current_weather()
+    locations = [
+        ("Kolkata", 22.57, 88.36),
+        ("Bangalore", 12.97, 77.59)
+    ]
 
-    # Add ingestion metadata
-    bronze_data = bronze_processor.process(weather)
+    bronze_records = []
+
+    for city, latitude, longitude in locations:
+
+        print(f"Fetching weather data for {city}")
+
+        weather = client.get_current_weather(
+            city=city,
+            latitude=latitude,
+            longitude=longitude
+        )
+
+        bronze_data = bronze_processor.process(weather)
+
+        bronze_records.append(bronze_data)
 
     # ---------------------------------------------------------
     # Temporary local JSON backup
@@ -40,7 +55,7 @@ def main():
     file_path_bronze = Path(BRONZE_DIRECTORY) / file_name
 
     file_manager.save_json(
-        bronze_data,
+        bronze_records,
         str(file_path_bronze)
     )
 
@@ -50,7 +65,7 @@ def main():
     # Write to Bronze Delta table
     # ---------------------------------------------------------
 
-    bronze_df = spark.createDataFrame([bronze_data])
+    bronze_df = spark.createDataFrame(bronze_records)
 
     bronze_df.write \
         .format("delta") \
