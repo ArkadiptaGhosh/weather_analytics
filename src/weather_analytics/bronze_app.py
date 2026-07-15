@@ -5,7 +5,7 @@ from pyspark.sql import SparkSession
 
 from weather_analytics.api.weather_client import WeatherClient
 from weather_analytics.processing.bronze_processor import BronzeProcessor
-from weather_analytics.config import LOCATIONS
+from weather_analytics.config.location import LOCATIONS
 
 
 
