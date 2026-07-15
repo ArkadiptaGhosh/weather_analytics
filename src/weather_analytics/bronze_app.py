@@ -1,5 +1,4 @@
-from datetime import datetime
-from pathlib import Path
+import logging
 
 from pyspark.sql import SparkSession
 
@@ -7,16 +6,19 @@ from weather_analytics.api.weather_client import WeatherClient
 from weather_analytics.processing.bronze_processor import BronzeProcessor
 from weather_analytics.config.location import LOCATIONS
 
-import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+)
 
 logger = logging.getLogger(__name__)
-
 
 
 def main():
     """Bronze ingestion pipeline."""
 
-    print("Starting weather data ingestion...")
+    logger.info("Starting weather data ingestion...")
 
     spark = SparkSession.getActiveSession()
 
@@ -26,12 +28,13 @@ def main():
     client = WeatherClient()
     bronze_processor = BronzeProcessor()
 
-
     bronze_records = []
 
     for city, latitude, longitude in LOCATIONS:
 
-        print(f"Fetching weather data for {city}")
+        logger.info(
+            f"Fetching weather data for {city}"
+        )
 
         weather = client.get_current_weather(
             city=city,
@@ -39,15 +42,21 @@ def main():
             longitude=longitude
         )
 
-        bronze_data = bronze_processor.process(weather)
+        bronze_data = bronze_processor.process(
+            weather
+        )
 
-        bronze_records.append(bronze_data)
+        bronze_records.append(
+            bronze_data
+        )
 
-    # ---------------------------------------------------------
-    # Write to Bronze Delta table
-    # ---------------------------------------------------------
+    logger.info(
+        f"Fetched weather data for {len(bronze_records)} cities"
+    )
 
-    bronze_df = spark.createDataFrame(bronze_records)
+    bronze_df = spark.createDataFrame(
+        bronze_records
+    )
 
     bronze_df.write \
         .format("delta") \
@@ -57,10 +66,10 @@ def main():
             "weather_analytics.bronze.weather_raw"
         )
 
-    logger.info("Starting weather data ingestion...")
-    logger.info("---------------------------------------------------------")
-    logger.info(f"Fetching weather data for {city}")
-logger.info("Bronze data written to weather_analytics.bronze.weather_raw")
+    logger.info(
+        "Bronze data written to "
+        "weather_analytics.bronze.weather_raw"
+    )
 
 
 if __name__ == "__main__":
