@@ -4,7 +4,7 @@ resources:
       name: weather_analytics_job
 
       schedule:
-        quartz_cron_expression: "0 0 8 * * ?"
+        quartz_cron_expression: "0 0 0,12 * * ?"
         timezone_id: "Asia/Kolkata"
         pause_status: "UNPAUSED"
 
