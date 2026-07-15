@@ -5,6 +5,8 @@ from pyspark.sql import SparkSession
 
 from weather_analytics.api.weather_client import WeatherClient
 from weather_analytics.processing.bronze_processor import BronzeProcessor
+from weather_analytics.config import LOCATIONS
+
 
 
 def main():
@@ -20,14 +22,10 @@ def main():
     client = WeatherClient()
     bronze_processor = BronzeProcessor()
 
-    locations = [
-        ("Kolkata", 22.57, 88.36),
-        ("Bangalore", 12.97, 77.59)
-    ]
 
     bronze_records = []
 
-    for city, latitude, longitude in locations:
+    for city, latitude, longitude in LOCATIONS:
 
         print(f"Fetching weather data for {city}")
 
