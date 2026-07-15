@@ -1,14 +1,25 @@
+import logging
+
 from pyspark.sql import SparkSession
 
 from weather_analytics.processing.silver_processor import (
     SilverProcessor
 )
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+)
+
+logger = logging.getLogger(__name__)
+
+
 
 def main():
     """Silver transformation pipeline."""
 
-    print("Starting silver pipeline...")
+    logger.info("Starting silver pipeline...")
+    logger.info("------------------------------------------------------")
 
     spark = SparkSession.getActiveSession()
 
@@ -52,7 +63,7 @@ def main():
             "weather_analytics.silver.weather_curated"
         )
 
-    print(
+    logger.info(
         "Silver data written to "
         "weather_analytics.silver.weather_curated"
     )
