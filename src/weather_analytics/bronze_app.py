@@ -59,6 +59,9 @@ def main():
             bronze_data
         )
 
+
+    logger.info("------------------------------------------------------")
+    
     logger.info(
         f"Fetched weather data for {len(bronze_records)} cities"
     )
