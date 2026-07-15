@@ -65,6 +65,6 @@ class SilverProcessor:
             ),
             "silver_processed_timestamp": (
                 datetime.now(
-                timezone.utc).isoformat()
+                timezone.utc)
 ),
         }

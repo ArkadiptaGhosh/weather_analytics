@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS weather_analytics.bronze.weather_raw (
     elevation DOUBLE,
     generationtime_ms DOUBLE,
     ingestion_source STRING,
-    ingestion_timestamp STRING,
+    ingestion_timestamp TIMESTAMP, -- Changed from STRING to TIMESTAMP for best practice
     latitude DOUBLE,
     longitude DOUBLE,
     timezone STRING,

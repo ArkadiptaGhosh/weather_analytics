@@ -29,8 +29,11 @@ class WeatherClient:
 
         response = requests.get(
             self.base_url,
-            params=params
+            params=params,
+            timeout=30
         )
+
+        response.raise_for_status()
 
         if response.status_code == 200:
             weather_data = response.json()

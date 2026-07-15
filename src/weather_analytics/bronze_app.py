@@ -4,7 +4,7 @@ from pyspark.sql import SparkSession
 
 from weather_analytics.api.weather_client import WeatherClient
 from weather_analytics.processing.bronze_processor import BronzeProcessor
-from weather_analytics.config.location import *
+from weather_analytics.config.location import BRONZE_TABLE, LOCATIONS
 
 
 logging.basicConfig(
@@ -65,6 +65,10 @@ def main():
     logger.info(
         f"Fetched weather data for {len(bronze_records)} cities"
     )
+
+    if not bronze_records:
+        logger.warning("No weather data was fetched; skipping Bronze write.")
+        return
 
     bronze_df = spark.createDataFrame(
         bronze_records
