@@ -37,11 +37,19 @@ def main():
             f"Fetching weather data for {city}"
         )
 
-        weather = client.get_current_weather(
-            city=city,
-            latitude=latitude,
-            longitude=longitude
-        )
+        try:
+            weather = client.get_current_weather(
+                city=city,
+                latitude=latitude,
+                longitude=longitude
+            )
+        except Exception as exc:
+            logger.error(
+                "Failed to fetch weather data for %s: %s",
+                city,
+                exc
+            )
+            continue
 
         bronze_data = bronze_processor.process(
             weather
