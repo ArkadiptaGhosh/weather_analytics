@@ -5,7 +5,7 @@ from pyspark.sql import SparkSession
 from weather_analytics.processing.silver_processor import (
     SilverProcessor
 )
-from weather_analytics.src.weather_analytics.config.location import SILVER_TABLE
+from weather_analytics.config.location import SILVER_TABLE
 
 logging.basicConfig(
     level=logging.INFO,
