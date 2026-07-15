@@ -7,6 +7,10 @@ from weather_analytics.api.weather_client import WeatherClient
 from weather_analytics.processing.bronze_processor import BronzeProcessor
 from weather_analytics.config.location import LOCATIONS
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 
 def main():
@@ -53,10 +57,9 @@ def main():
             "weather_analytics.bronze.weather_raw"
         )
 
-    print(
-        "Bronze data written to "
-        "weather_analytics.bronze.weather_raw"
-    )
+    logger.info("Starting weather data ingestion...")
+    logger.info(f"Fetching weather data for {city}")
+    logger.info("Bronze data written successfully")
 
 
 if __name__ == "__main__":
