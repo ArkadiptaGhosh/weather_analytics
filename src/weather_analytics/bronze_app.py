@@ -4,7 +4,7 @@ from pyspark.sql import SparkSession
 
 from weather_analytics.api.weather_client import WeatherClient
 from weather_analytics.processing.bronze_processor import BronzeProcessor
-from weather_analytics.config.location import LOCATIONS
+from weather_analytics.config.location import *
 
 
 logging.basicConfig(
@@ -61,7 +61,7 @@ def main():
 
 
     logger.info("------------------------------------------------------")
-    
+
     logger.info(
         f"Fetched weather data for {len(bronze_records)} cities"
     )
@@ -75,7 +75,7 @@ def main():
         .mode("append") \
         .option("mergeSchema", "true") \
         .saveAsTable(
-            "weather_analytics.bronze.weather_raw"
+            BRONZE_TABLE
         )
 
 
@@ -83,7 +83,7 @@ def main():
 
     logger.info(
         "Bronze data written to "
-        "weather_analytics.bronze.weather_raw"
+        f"{BRONZE_TABLE}"
     )
 
 

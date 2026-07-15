@@ -11,3 +11,15 @@ LOCATIONS = [
     ("Chennai", 13.0827, 80.2707),
     ("Jaipur", 26.9124, 75.7873)
 ]
+
+
+
+CATALOG_NAME = "weather_analytics"
+
+BRONZE_TABLE = (
+    f"{CATALOG_NAME}.bronze.weather_raw"
+)
+
+SILVER_TABLE = (
+    f"{CATALOG_NAME}.silver.weather_curated"
+)

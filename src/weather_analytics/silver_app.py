@@ -5,6 +5,7 @@ from pyspark.sql import SparkSession
 from weather_analytics.processing.silver_processor import (
     SilverProcessor
 )
+from weather_analytics.src.weather_analytics.config.location import SILVER_TABLE
 
 logging.basicConfig(
     level=logging.INFO,
@@ -60,12 +61,12 @@ def main():
             "true"
         ) \
         .saveAsTable(
-            "weather_analytics.silver.weather_curated"
+            SILVER_TABLE
         )
 
     logger.info(
         "Silver data written to "
-        "weather_analytics.silver.weather_curated"
+        f"{SILVER_TABLE}"
     )
 
 
