@@ -19,6 +19,7 @@ def main():
     """Bronze ingestion pipeline."""
 
     logger.info("Starting weather data ingestion...")
+    logger.info("------------------------------------------------------")
 
     spark = SparkSession.getActiveSession()
 
