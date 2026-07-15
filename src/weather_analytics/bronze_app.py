@@ -60,7 +60,7 @@ def main():
     logger.info("Starting weather data ingestion...")
     logger.info("---------------------------------------------------------")
     logger.info(f"Fetching weather data for {city}")
-    logger.info("Bronze data written to weather_analytics.bronze.weather_raw")
+logger.info("Bronze data written to weather_analytics.bronze.weather_raw")
 
 
 if __name__ == "__main__":
