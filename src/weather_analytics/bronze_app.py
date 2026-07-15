@@ -67,6 +67,9 @@ def main():
             "weather_analytics.bronze.weather_raw"
         )
 
+
+    logger.info("------------------------------------------------------")
+
     logger.info(
         "Bronze data written to "
         "weather_analytics.bronze.weather_raw"
