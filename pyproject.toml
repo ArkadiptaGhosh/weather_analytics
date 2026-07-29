@@ -1,6 +1,6 @@
 [project]
 name = "weather-analytics"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = [
     {name = "ArkadiptaGhosh",email = "arkadiptaghosh99@gmail.com"}
@@ -12,8 +12,8 @@ dependencies = [
 ]
 
 [project.scripts]
-weather-bronze = "weather_analytics.bronze_app:main"
-weather-silver = "weather_analytics.silver_app:main"
+weather-bronze = "weather_analytics.entrypoint:main"
+weather-silver = "weather_analytics.entrypoint:main"
 
 [tool.poetry]
 packages = [{include = "weather_analytics", from = "src"}]
