@@ -12,12 +12,21 @@ class SilverProcessor:
             F.col("latitude").cast("double").alias("latitude"),
             
             F.col("longitude").cast("double").alias("longitude"),
+
+            
+            F.col("elevation").cast("int").alias("elevation"),
             
             F.col("current.temperature_2m").cast("double").alias("temperature"),
+
+            F.col("current_units.temperature_2m").alias("temperature_unit"),
             
             F.col("current.relative_humidity_2m").cast("int").alias("humidity"),
+
+            F.col("current_units.relative_humidity_2m").alias("humidity_unit"),
             
             F.col("current.wind_speed_10m").cast("double").alias("wind_speed"),
+
+            F.col("current_units.wind_speed_10m").alias("wind_speed_unit"),
             
             F.to_timestamp(F.col("current.time")).alias("weather_time"),
             

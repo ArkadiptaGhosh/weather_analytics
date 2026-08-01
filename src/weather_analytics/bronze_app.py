@@ -92,6 +92,9 @@ def main(args):
         f"{BRONZE_TABLE}"
     )
 
+    logger.info("------------------------------------------------------")
+    logger.info(f"Mail sent to {args.email} for {args.run_id} and job started at {args.execution_date}")
+
 
 if __name__ == "__main__":
     main()

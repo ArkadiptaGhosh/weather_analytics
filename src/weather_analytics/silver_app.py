@@ -17,6 +17,9 @@ def main(args):
     """Silver transformation pipeline."""
     BRONZE_TABLE = location.get_bronze_table(args)
     SILVER_TABLE = location.get_silver_table(args)
+    email_id = args.email if args.email else " "
+    run_id = args.run_id if args.run_id else " "
+    execution_date = args.execution_date if args.execution_date else " "
 
     logger.info("Starting silver pipeline...")
     logger.info(
@@ -175,6 +178,12 @@ def main(args):
     logger.info(
         f"Silver data written successfully to "
         f"{SILVER_TABLE}"
+    )
+
+    logger.info("------------------------------------------------------")
+    logger.info(
+        f"Weather analytics pipeline completed successfully for {email_id}! "
+        f"for {run_id} and job started at {execution_date}"
     )
 
 
