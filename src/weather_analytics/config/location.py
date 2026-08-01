@@ -13,13 +13,9 @@ LOCATIONS = [
 ]
 
 
+def get_bronze_table(args):
+    return f"{args.bronze_catalogue}.{args.bronze_schema}.{args.bronze_table}"
 
-CATALOG_NAME = "weather_analytics"
 
-BRONZE_TABLE = (
-    f"{CATALOG_NAME}.bronze.weather_raw"
-)
-
-SILVER_TABLE = (
-    f"{CATALOG_NAME}.silver.weather_curated"
-)
+def get_silver_table(args):
+    return f"{args.silver_catalogue}.{args.silver_schema}.{args.silver_table}"

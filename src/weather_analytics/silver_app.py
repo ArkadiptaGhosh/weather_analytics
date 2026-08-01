@@ -1,12 +1,9 @@
 import logging
 
 from pyspark.sql import SparkSession
-from pyspark.sql import functions as F
 
-from weather_analytics.config.location import (
-    BRONZE_TABLE,
-    SILVER_TABLE
-)
+from weather_analytics.config import location
+from weather_analytics.processing.silver_processor import SilverProcessor
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,8 +13,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def main():
+def main(args):
     """Silver transformation pipeline."""
+    BRONZE_TABLE = location.get_bronze_table(args)
+    SILVER_TABLE = location.get_silver_table(args)
 
     logger.info("Starting silver pipeline...")
     logger.info(
@@ -75,81 +74,87 @@ def main():
     # ---------------------------------------------------------
     # Flatten Bronze JSON structure
     # ---------------------------------------------------------
+    silver_processor = SilverProcessor()
+    
+    # new_bronze_df.select(
+    #     "city",
 
-    silver_df = new_bronze_df.select(
-        "city",
+    #     F.col(
+    #         "latitude"
+    #     ).cast(
+    #         "double"
+    #     ).alias(
+    #         "latitude"
+    #     ),
 
-        F.col(
-            "latitude"
-        ).cast(
-            "double"
-        ).alias(
-            "latitude"
-        ),
+    #     F.col(
+    #         "longitude"
+    #     ).cast(
+    #         "double"
+    #     ).alias(
+    #         "longitude"
+    #     ),
 
-        F.col(
-            "longitude"
-        ).cast(
-            "double"
-        ).alias(
-            "longitude"
-        ),
+    #     F.col(
+    #         "current"
+    #     )[
+    #         "temperature_2m"
+    #     ].cast(
+    #         "double"
+    #     ).alias(
+    #         "temperature"
+    #     ),
 
-        F.col(
-            "current"
-        )[
-            "temperature_2m"
-        ].cast(
-            "double"
-        ).alias(
-            "temperature"
-        ),
+    #     F.col(
+    #         "current"
+    #     )[
+    #         "relative_humidity_2m"
+    #     ].cast(
+    #         "int"
+    #     ).alias(
+    #         "humidity"
+    #     ),
 
-        F.col(
-            "current"
-        )[
-            "relative_humidity_2m"
-        ].cast(
-            "int"
-        ).alias(
-            "humidity"
-        ),
+    #     F.col(
+    #         "
+    # "
+    #     )[
+    #         "wind_speed_10m"
+    #     ].cast(
+    #         "double"
+    #     ).alias(
+    #         "wind_speed"
+    #     ),
 
-        F.col(
-            "current"
-        )[
-            "wind_speed_10m"
-        ].cast(
-            "double"
-        ).alias(
-            "wind_speed"
-        ),
+    #     F.to_timestamp(
+    #         F.col(
+    #             "current"
+    #         )[
+    #             "time"
+    #         ]
+    #     ).alias(
+    #         "weather_time"
+    #     ),
 
-        F.to_timestamp(
-            F.col(
-                "current"
-            )[
-                "time"
-            ]
-        ).alias(
-            "weather_time"
-        ),
+    #     "timezone",
 
-        "timezone",
+    #     F.col(
+    #         "ingestion_timestamp"
+    #     ).cast(
+    #         "timestamp"
+    #     ).alias(
+    #         "ingestion_timestamp"
+    #     ),
 
-        F.col(
-            "ingestion_timestamp"
-        ).cast(
-            "timestamp"
-        ).alias(
-            "ingestion_timestamp"
-        ),
+    #     F.current_timestamp().alias(
+    #         "silver_processed_timestamp"
+    #     ),
 
-        F.current_timestamp().alias(
-            "silver_processed_timestamp"
-        ),
+    #     "ingestion_source"
+    # )
 
-        "ingestion_source"
+    silver_df = silver_processor.process(
+        new_bronze_df
     )
 
     # ---------------------------------------------------------

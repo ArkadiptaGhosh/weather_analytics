@@ -14,8 +14,11 @@ resources:
           python_wheel_task:
             package_name: weather_analytics
             entry_point: weather-bronze
-            named_parabronzemeters:
-              layer: 
+            named_parameters:
+              layer: bronze
+              bronze_catalogue: weather_analytics
+              bronze_schema : bronze
+              bronze_table : weather_raw
 
 
           environment_key: weather_environment
@@ -30,6 +33,12 @@ resources:
             entry_point: weather-silver
             named_parameters:
               layer: silver
+              bronze_catalogue: weather_analytics
+              bronze_schema : bronze
+              bronze_table : weather_raw
+              silver_catalogue: weather_analytics
+              silver_schema : silver
+              silver_table : weather_curated
 
           environment_key: weather_environment
 
