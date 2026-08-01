@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 def main(args):
     """Bronze ingestion pipeline."""
     BRONZE_TABLE = location.get_bronze_table(args)
-    SILVER_TABLE = location.get_silver_table(args)
+    env = args.env if args.env else " "
 
     logger.info("Starting weather data ingestion...")
     logger.info("------------------------------------------------------")
@@ -92,8 +92,9 @@ def main(args):
         f"{BRONZE_TABLE}"
     )
 
-    logger.info("------------------------------------------------------")
-    logger.info(f"Mail sent to {args.email} for {args.run_id} and job started at {args.execution_date}")
+    if env == "prod":
+        logger.info("------------------------------------------------------")
+        logger.info(f"Mail sent to {args.email_id} for {args.run_id} and job started at {args.execution_date}")
 
 
 if __name__ == "__main__":

@@ -1,44 +1,20 @@
-# 1. This block automatically builds your Poetry wheel file with the right name
-artifacts:
-  default:
-    type: whl
-    build: poetry build
-    path: ../../
-    dynamic_version: true
-
-# 2. Define your dynamic values at the global bundle variable level
-variables:
-  global_run_id:
-    default: "{{job.run_id}}"
-  global_execution_date:
-    default: "{{job.start_time.iso_date}}"
-  email_id:
-    default: "arkadiptaghosh99@gmail.com"
-
-# Global permissions applied to ALL resources in this bundle
-permissions:
-  - user_name: arkadiptaghosh81@gmail.com
-    level: CAN_MANAGE
-  - user_name: rajnil54.guha@gmail.com
-    level: CAN_VIEW
-
 resources:
   jobs:
     weather_analytics_job:
       name: wf_weather_analytics_job_prod
-      email_notifications:
-        on_success: 
-            - arkadiptaghosh99@gmail.com
-        on_failure: 
-            - arkadiptaghosh99@gmail.com
 
       parameters:
-        - name: email
-          default: ${var.email_id}
         - name: run_id
           default: ${var.global_run_id}
         - name: execution_date
           default: ${var.global_execution_date}
+
+
+      email_notifications:
+        on_success: 
+            - ${var.email_id}
+        on_failure: 
+            - ${var.email_id}
 
       schedule:
         quartz_cron_expression: "0 0 0 * * ?"
@@ -52,9 +28,12 @@ resources:
             entry_point: weather-bronze
             named_parameters:
               layer: bronze
-              bronze_catalogue: weather_analytics
-              bronze_schema : bronze
+              bronze_catalogue: ${var.catalog_name}
+              bronze_schema : ${var.bronze_schema}
               bronze_table : weather_raw
+              env: ${var.env}
+              email_id: ${var.email_id}
+            
           environment_key: weather_environment
 
         - task_key: silver_job
@@ -65,12 +44,14 @@ resources:
             entry_point: weather-silver
             named_parameters:
               layer: silver
-              bronze_catalogue: weather_analytics
-              bronze_schema : bronze
+              bronze_catalogue: ${var.catalog_name}
+              bronze_schema : ${var.bronze_schema}
               bronze_table : weather_raw
-              silver_catalogue: weather_analytics
-              silver_schema : silver
+              silver_catalogue: ${var.catalog_name}
+              silver_schema : ${var.silver_schema}
               silver_table : weather_curated
+              env: ${var.env}
+              email_id: ${var.email_id}
           environment_key: weather_environment
 
       environments:

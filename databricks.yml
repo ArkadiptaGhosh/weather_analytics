@@ -7,9 +7,53 @@ include:
 workspace:
   host: https://dbc-b1a7c3fe-a880.cloud.databricks.com
 
+artifacts:
+  default:
+    type: whl
+    build: poetry build
+    path: .
+    dynamic_version: true
+
+
+variables:
+  global_run_id:
+    default: "{{job.run_id}}"
+
+  global_execution_date:
+    default: "{{job.start_time.iso_date}}"
+    
+
+  email_id:
+    description: "Email for notifications"
+
+  catalog_name:
+    description: "Target Catalog"
+
+  bronze_schema:
+    default: "bronze"
+
+  silver_schema:
+    default: "silver"
+
+  env:
+    description: "Environment"
+
+
+permissions:
+  - user_name: ${workspace.current_user.userName}
+    level: CAN_MANAGE
+
+  - user_name: rajnil54.guha@gmail.com
+    level: CAN_VIEW
+
 targets:
   dev:
     mode: development
+    variables:
+      catalog_name: weather_dev
+      env: 'dev'
+      email_id: ""
+
     workspace:
       root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
 
@@ -25,6 +69,11 @@ targets:
   prod:
     mode: production
     default: true
+
+    variables:
+      catalog_name: weather_prod
+      env: 'prod'
+      email_id: "arkadiptaghosh99@gmail.com"
 
     workspace:
       root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}

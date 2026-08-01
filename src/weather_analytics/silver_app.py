@@ -17,9 +17,9 @@ def main(args):
     """Silver transformation pipeline."""
     BRONZE_TABLE = location.get_bronze_table(args)
     SILVER_TABLE = location.get_silver_table(args)
-    email_id = args.email if args.email else " "
     run_id = args.run_id if args.run_id else " "
     execution_date = args.execution_date if args.execution_date else " "
+    env = args.env if args.env else " "
 
     logger.info("Starting silver pipeline...")
     logger.info(
@@ -78,84 +78,7 @@ def main(args):
     # Flatten Bronze JSON structure
     # ---------------------------------------------------------
     silver_processor = SilverProcessor()
-    
-    # new_bronze_df.select(
-    #     "city",
-
-    #     F.col(
-    #         "latitude"
-    #     ).cast(
-    #         "double"
-    #     ).alias(
-    #         "latitude"
-    #     ),
-
-    #     F.col(
-    #         "longitude"
-    #     ).cast(
-    #         "double"
-    #     ).alias(
-    #         "longitude"
-    #     ),
-
-    #     F.col(
-    #         "current"
-    #     )[
-    #         "temperature_2m"
-    #     ].cast(
-    #         "double"
-    #     ).alias(
-    #         "temperature"
-    #     ),
-
-    #     F.col(
-    #         "current"
-    #     )[
-    #         "relative_humidity_2m"
-    #     ].cast(
-    #         "int"
-    #     ).alias(
-    #         "humidity"
-    #     ),
-
-    #     F.col(
-    #         "
-    # "
-    #     )[
-    #         "wind_speed_10m"
-    #     ].cast(
-    #         "double"
-    #     ).alias(
-    #         "wind_speed"
-    #     ),
-
-    #     F.to_timestamp(
-    #         F.col(
-    #             "current"
-    #         )[
-    #             "time"
-    #         ]
-    #     ).alias(
-    #         "weather_time"
-    #     ),
-
-    #     "timezone",
-
-    #     F.col(
-    #         "ingestion_timestamp"
-    #     ).cast(
-    #         "timestamp"
-    #     ).alias(
-    #         "ingestion_timestamp"
-    #     ),
-
-    #     F.current_timestamp().alias(
-    #         "silver_processed_timestamp"
-    #     ),
-
-    #     "ingestion_source"
-    # )
-
+   
     silver_df = silver_processor.process(
         new_bronze_df
     )
@@ -180,11 +103,13 @@ def main(args):
         f"{SILVER_TABLE}"
     )
 
-    logger.info("------------------------------------------------------")
-    logger.info(
-        f"Weather analytics pipeline completed successfully for {email_id}! "
-        f"for {run_id} and job started at {execution_date}"
-    )
+    if env == "prod":
+        email_address = args.email_id if args.email_id else " "
+        logger.info("------------------------------------------------------")
+        logger.info(
+            f"Weather analytics pipeline completed successfully for {email_address}!"
+            f"for {run_id} and job started at {execution_date}"
+        )
 
 
 if __name__ == "__main__":

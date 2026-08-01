@@ -1,5 +1,6 @@
 import argparse
 
+
 import weather_analytics.bronze_app as BronzeRun
 import weather_analytics.silver_app as SilverRun
 
@@ -13,14 +14,12 @@ parser.add_argument("--bronze_table", required=False, help="Specify the bronze t
 parser.add_argument("--silver_catalogue", required=False, help="Specify the silver catalogue name")
 parser.add_argument("--silver_schema", required=False, help="Specify the silver schema name")
 parser.add_argument("--silver_table", required=False, help="Specify the silver table name")
-parser.add_argument("--email", required=False, help="Specify the email ID")
 parser.add_argument("--run_id", required=False, help="Specify the run ID")
 parser.add_argument("--execution_date", required=False, help="Specify the execution date")
-
+parser.add_argument("--env", required=False, help="Specify the environment (dev or prod)")
+parser.add_argument("--email_id", required=True, help="Specify the email ID for notifications")
 
 args = parser.parse_args()
-
-
 
 def main():
     if args.layer == "bronze":
