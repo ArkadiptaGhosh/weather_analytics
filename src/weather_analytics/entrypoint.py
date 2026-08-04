@@ -61,6 +61,7 @@ def main():
         logger.info("run_id: %s", config.run_id)
         logger.info("execution_date: %s", config.execution_date)
 
+        # Running the Bronze Pipeline...
         bronze_app.main(config)
 
     elif config.layer == "silver":
@@ -73,6 +74,7 @@ def main():
         logger.info("run_id: %s", config.run_id)
         logger.info("execution_date: %s", config.execution_date)
 
+        # Running the Silver Pipeline...
         silver_app.main(config)
 
     else:
