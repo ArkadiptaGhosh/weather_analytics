@@ -78,8 +78,8 @@ def main():
         silver_app.main(config)
 
     else:
-        logger.error("Invalid layer specified. Use 'bronze' or 'silver'.")
-        raise ValueError("Invalid layer specified. Use 'bronze' or 'silver'.")
+        logger.error("Invalid layer specified: %s", config.layer)
+        raise ValueError("Invalid layer specified")
 
 
 if __name__ == "__main__":
