@@ -34,7 +34,7 @@ def create_parser():
     return parser
 
 
-#######   Main Entrypoint of the weather_analytics Application   #######
+#######   Main Entrypoint of the weather_analytics Application  #######
 def main():
 
     args = create_parser().parse_args()
