@@ -2,8 +2,12 @@ import logging
 
 from pyspark.sql import SparkSession
 
-from weather_analytics.config import location
 from weather_analytics.processing.silver_processor import SilverProcessor
+
+from weather_analytics.config import (
+    job_config,
+    location
+)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -13,13 +17,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def main(args):
+def main(config):
     """Silver transformation pipeline."""
-    BRONZE_TABLE = location.get_bronze_table(args)
-    SILVER_TABLE = location.get_silver_table(args)
-    run_id = args.run_id if args.run_id else " "
-    execution_date = args.execution_date if args.execution_date else " "
-    env = args.env if args.env else " "
+    BRONZE_TABLE = job_config.get_bronze_table(config)
+    SILVER_TABLE = job_config.get_silver_table(config)
 
     logger.info("Starting silver pipeline...")
     logger.info(
@@ -102,14 +103,6 @@ def main(args):
         f"Silver data written successfully to "
         f"{SILVER_TABLE}"
     )
-
-    if env == "prod":
-        email_address = args.email_id if args.email_id else " "
-        logger.info("------------------------------------------------------")
-        logger.info(
-            f"Weather analytics pipeline completed successfully for {email_address}!"
-            f"for {run_id} and job started at {execution_date}"
-        )
 
 
 if __name__ == "__main__":

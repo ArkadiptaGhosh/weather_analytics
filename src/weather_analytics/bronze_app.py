@@ -4,7 +4,10 @@ from pyspark.sql import SparkSession
 
 from weather_analytics.api.weather_client import WeatherClient
 from weather_analytics.processing.bronze_processor import BronzeProcessor
-from weather_analytics.config import location
+from weather_analytics.config import (
+    job_config,
+    location
+)
 
 
 logging.basicConfig(
@@ -15,10 +18,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def main(args):
+def main(config):
     """Bronze ingestion pipeline."""
-    BRONZE_TABLE = location.get_bronze_table(args)
-    env = args.env if args.env else " "
+   
+    BRONZE_TABLE = job_config.get_bronze_table(config)
 
     logger.info("Starting weather data ingestion...")
     logger.info("------------------------------------------------------")
@@ -33,7 +36,9 @@ def main(args):
 
     bronze_records = []
 
-    for city, latitude, longitude in location.LOCATIONS:
+    all_locations = location.location_config()
+
+    for city, latitude, longitude in all_locations:
 
         logger.info(
             f"Fetching weather data for {city}"
@@ -91,10 +96,6 @@ def main(args):
         "Bronze data written to "
         f"{BRONZE_TABLE}"
     )
-
-    if env == "prod":
-        logger.info("------------------------------------------------------")
-        logger.info(f"Mail sent to {args.email_id} for {args.run_id} and job started at {args.execution_date}")
 
 
 if __name__ == "__main__":
