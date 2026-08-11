@@ -48,6 +48,24 @@ resources:
               silver_catalogue: ${var.catalog_name}
               silver_schema : ${var.silver_schema}
               silver_table : weather_curated
+
+          environment_key: weather_environment
+
+        - task_key: gold_aggregation
+          depends_on:
+            - task_key: silver_job
+          python_wheel_task:
+            package_name: weather_analytics
+            entry_point: weather-gold
+            named_parameters:
+              layer: gold
+              silver_catalogue: ${var.catalog_name}
+              silver_schema : ${var.silver_schema}
+              silver_table : weather_curated
+              gold_catalogue: ${var.catalog_name}
+              gold_schema : ${var.gold_schema}
+              gold_table : weather_insights
+
           environment_key: weather_environment
 
       environments:

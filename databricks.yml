@@ -35,6 +35,9 @@ variables:
   silver_schema:
     default: "silver"
 
+  gold_schema:
+    default: "gold"
+
   env:
     description: "Environment"
 
