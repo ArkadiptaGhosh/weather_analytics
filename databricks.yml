@@ -32,11 +32,20 @@ variables:
   bronze_schema:
     default: "bronze"
 
+  bronze_table:
+    default: "weather_raw"
+
   silver_schema:
     default: "silver"
 
+  silver_table:
+    default: "weather_curated"
+
   gold_schema:
     default: "gold"
+
+  gold_table:
+    default: "weather_insights"
 
   env:
     description: "Environment"

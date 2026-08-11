@@ -14,6 +14,11 @@ class JobConfig:
     silver_schema: str  | None = None
     silver_table: str | None = None
 
+
+    gold_catalogue: str | None = None
+    gold_schema: str | None = None
+    gold_table: str | None = None
+
     run_id: str |  None = None
     execution_date: str | None = None
 

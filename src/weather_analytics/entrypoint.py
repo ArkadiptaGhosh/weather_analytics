@@ -28,6 +28,9 @@ def create_parser():
     parser.add_argument("--silver_catalogue", required=False, help="Specify the silver catalogue name")
     parser.add_argument("--silver_schema", required=False, help="Specify the silver schema name")
     parser.add_argument("--silver_table", required=False, help="Specify the silver table name")
+    parser.add_argument("--gold_catalogue", required=False, help="Specify the gold catalogue name")
+    parser.add_argument("--gold_schema", required=False, help="Specify the gold schema name")
+    parser.add_argument("--gold_table", required=False, help="Specify the gold table name")
     parser.add_argument("--run_id", required=False, help="Specify the run ID")
     parser.add_argument("--execution_date", required=False, help="Specify the execution date")
 
@@ -47,6 +50,9 @@ def main():
         silver_catalogue=args.silver_catalogue,
         silver_schema=args.silver_schema,
         silver_table=args.silver_table,
+        gold_catalogue=args.gold_catalogue,
+        gold_schema=args.gold_schema,
+        gold_table=args.gold_table,
         run_id=args.run_id,
         execution_date=args.execution_date
     )
@@ -77,6 +83,18 @@ def main():
         # Running the Silver Pipeline...
         silver_app.main(config)
 
+    elif config.layer == "gold":
+        logger.info("------------------------------------------------------")
+        logger.info("gold Catalogue: %s", config.gold_catalogue)
+        logger.info("gold Schema: %s", config.gold_schema)
+        logger.info("gold Table: %s", config.gold_table)
+        logger.info("Running %s layer", config.layer)
+        logger.info("------------------------------------------------------")
+        logger.info("run_id: %s", config.run_id)
+        logger.info("execution_date: %s", config.execution_date)
+
+        # Running the Gold Pipeline...
+        # gold_app.main(config)
     else:
         logger.error("Invalid layer specified: %s", config.layer)
         raise ValueError("Invalid layer specified")
