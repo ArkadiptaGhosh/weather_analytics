@@ -25,7 +25,7 @@ resources:
         - task_key: bronze_ingestion
           python_wheel_task:
             package_name: weather_analytics
-            entry_point: weather-bronze
+            entry_point: EntryPoint
             named_parameters:
               layer: bronze
               bronze_catalogue: ${var.catalog_name}
@@ -39,7 +39,7 @@ resources:
             - task_key: bronze_ingestion
           python_wheel_task:
             package_name: weather_analytics
-            entry_point: weather-silver
+            entry_point: EntryPoint
             named_parameters:
               layer: silver
               bronze_catalogue: ${var.catalog_name}
@@ -56,7 +56,7 @@ resources:
             - task_key: silver_job
           python_wheel_task:
             package_name: weather_analytics
-            entry_point: weather-gold
+            entry_point: EntryPoint
             named_parameters:
               layer: gold
               silver_catalogue: ${var.catalog_name}
