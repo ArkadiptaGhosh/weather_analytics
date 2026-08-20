@@ -5,6 +5,7 @@ import logging
 
 import weather_analytics.bronze_app as bronze_app
 import weather_analytics.silver_app as silver_app
+import weather_analytics.gold_app as gold_app
 
 from weather_analytics.config.job_config import JobConfig
 
@@ -94,7 +95,7 @@ def main():
         logger.info("execution_date: %s", config.execution_date)
 
         # Running the Gold Pipeline...
-        # gold_app.main(config)
+        gold_app.main(config)
     else:
         logger.error("Invalid layer specified: %s", config.layer)
         raise ValueError("Invalid layer specified")

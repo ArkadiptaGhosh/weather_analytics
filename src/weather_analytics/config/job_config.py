@@ -30,3 +30,6 @@ def get_bronze_table(config):
 
 def get_silver_table(config):
     return f"{config.silver_catalogue}.{config.silver_schema}.{config.silver_table}"
+
+def get_gold_table(config):
+    return f"{config.gold_catalogue}.{config.gold_schema}.{config.gold_table}"

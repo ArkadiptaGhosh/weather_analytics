@@ -1,7 +1,7 @@
 [project]
 name = "weather_analytics"
-version = "0.1.4"
-description = ""
+version = "0.1.5"
+description = "My DBX Weather weather_analytics project"
 authors = [
     {name = "ArkadiptaGhosh",email = "arkadiptaghosh99@gmail.com"}
 ]
