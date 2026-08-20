@@ -82,7 +82,7 @@ def main(config):
     )
 
     logger.info(
-        "Gold data merged successfully into"
+        "Gold data merged successfully into "
         f"{GOLD_TABLE}"
     )
 
