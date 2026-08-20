@@ -17,12 +17,11 @@ class GoldProcessor:
                 "weather_date"
             )
             .agg(
-                F.avg("temperature").alias("avg_temperature"),
-                F.max("temperature").alias("max_temperature"),
-                F.min("temperature").alias("min_temperature"),
-                F.avg("humidity").alias("avg_humidity"),
-                F.avg("wind_speed").alias("avg_wind_speed"),
-                F.count("*").alias("observation_count")
+                F.round(F.avg("temperature"), 2).alias("avg_temperature"),
+                F.round(F.max("temperature"), 2).alias("max_temperature"),
+                F.round(F.min("temperature"), 2).alias("min_temperature"),
+                F.round(F.avg("humidity"), 2).alias("avg_humidity"),
+                F.round(F.avg("wind_speed"), 2).alias("avg_wind_speed")
             )
             .withColumn(
                 "gold_processed_timestamp",

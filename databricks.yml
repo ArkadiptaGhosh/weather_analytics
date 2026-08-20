@@ -45,7 +45,7 @@ variables:
     default: "gold"
 
   gold_table:
-    default: "weather_insights"
+    default: "weather_summary"
 
   env:
     description: "Environment"

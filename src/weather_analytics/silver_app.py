@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 
 def main(config):
     """Silver transformation pipeline."""
+
+    # Resolve the Bronze source and Silver target tables for this environment.
     BRONZE_TABLE = job_config.get_bronze_table(config)
     SILVER_TABLE = job_config.get_silver_table(config)
 
@@ -27,6 +29,7 @@ def main(config):
         "------------------------------------------------------"
     )
 
+    # Reuse Databricks' active Spark session, or create one for local execution.
     spark = SparkSession.getActiveSession()
 
     if spark is None:
@@ -88,6 +91,7 @@ def main(config):
     # Write to Silver table
     # ---------------------------------------------------------
 
+    # Append only the newly transformed records to the curated Silver Delta table.
     silver_df.write \
         .format("delta") \
         .mode("append") \
