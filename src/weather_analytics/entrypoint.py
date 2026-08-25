@@ -18,8 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 def create_parser():
-
-
+    """Build the command-line parser for selecting and configuring a pipeline layer."""
     parser = argparse.ArgumentParser(description="Weather Analytics")
 
     parser.add_argument("--layer",required=True,help="Specify the layer to run: bronze or silver")
@@ -38,9 +37,8 @@ def create_parser():
     return parser
 
 
-#######   Main Entrypoint of the weather_analytics Application  #######
 def main():
-
+    """Parse runtime options and dispatch execution to the requested pipeline layer."""
     args = create_parser().parse_args()
 
     config = JobConfig(
@@ -68,7 +66,7 @@ def main():
         logger.info("run_id: %s", config.run_id)
         logger.info("execution_date: %s", config.execution_date)
 
-        # Running the Bronze Pipeline...
+        # Pass the shared job configuration to the bronze pipeline.
         bronze_app.main(config)
 
     elif config.layer == "silver":
@@ -81,7 +79,7 @@ def main():
         logger.info("run_id: %s", config.run_id)
         logger.info("execution_date: %s", config.execution_date)
 
-        # Running the Silver Pipeline...
+        # Pass the shared job configuration to the silver pipeline.
         silver_app.main(config)
 
     elif config.layer == "gold":
@@ -94,7 +92,7 @@ def main():
         logger.info("run_id: %s", config.run_id)
         logger.info("execution_date: %s", config.execution_date)
 
-        # Running the Gold Pipeline...
+        # Pass the shared job configuration to the gold pipeline.
         gold_app.main(config)
     else:
         logger.error("Invalid layer specified: %s", config.layer)
