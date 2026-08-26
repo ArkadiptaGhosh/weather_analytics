@@ -31,11 +31,12 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      # Install pytest explicitly so the test runner is available in the CI environment.
       - name: Install pytest
         run: pip install pytest
 
       # Run the automated test suite to verify that code changes have not broken existing functionality.
-      - name: Run tests
+      - name: Run pytest
         run: poetry run pytest
 
 
