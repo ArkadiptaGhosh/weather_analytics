@@ -28,3 +28,7 @@ jobs:
       # Install the project dependencies using the locked versions from poetry.lock.
       - name: Install dependencies
         run: poetry install
+
+      # Run the automated test suite to verify that code changes have not broken existing functionality.
+      - name: Run tests
+        run: poetry run pytest
