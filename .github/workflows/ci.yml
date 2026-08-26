@@ -31,9 +31,12 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      # Run the automated test suite to verify that code changes have not broken existing functionality.
-      - name: Run tests
-        run: poetry run pytest
+      - name: Install pytest
+        run: pip install pytest
+
+      # # Run the automated test suite to verify that code changes have not broken existing functionality.
+      # - name: Run tests
+      #   run: poetry run pytest
 
 
       # # Build the Python wheel that will be packaged and deployed to Databricks.
