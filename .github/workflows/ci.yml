@@ -34,18 +34,18 @@ jobs:
       - name: Install pytest
         run: pip install pytest
 
-      # # Run the automated test suite to verify that code changes have not broken existing functionality.
-      # - name: Run tests
-      #   run: poetry run pytest
+      # Run the automated test suite to verify that code changes have not broken existing functionality.
+      - name: Run tests
+        run: poetry run pytest
 
 
-      # # Build the Python wheel that will be packaged and deployed to Databricks.
-      # - name: Build package
-      #   run: poetry build
+      # Build the Python wheel that will be packaged and deployed to Databricks.
+      - name: Build package
+        run: poetry build
 
-      # Validate the Databricks Asset Bundle configuration before deployment.
-      - name: Validate Databricks Bundle
-        run: databricks bundle validate -t dev
+      # Install the Databricks CLI so CI can validate the Databricks Asset Bundle.
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
 
 
       # Validate the Databricks Asset Bundle configuration before deployment.
