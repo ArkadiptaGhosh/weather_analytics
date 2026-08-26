@@ -36,6 +36,15 @@ jobs:
         run: poetry run pytest
 
 
-      # Build the Python wheel that will be packaged and deployed to Databricks.
-      - name: Build package
-        run: poetry build
+      # # Build the Python wheel that will be packaged and deployed to Databricks.
+      # - name: Build package
+      #   run: poetry build
+
+      # Validate the Databricks Asset Bundle configuration before deployment.
+      - name: Validate Databricks Bundle
+        run: databricks bundle validate -t dev
+
+
+      # Validate the Databricks Asset Bundle configuration before deployment.
+      - name: Validate Databricks Bundle
+        run: databricks bundle validate -t dev
