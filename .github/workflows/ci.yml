@@ -1,0 +1,18 @@
+name: CI
+
+on:
+  pull_request:
+
+  push:
+    branches:
+      - main
+
+jobs:
+  # When a PR happens OR code is pushed to main, start a job called validate,
+  # run it on an Ubuntu machine, and first download my repository onto that machine.
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
