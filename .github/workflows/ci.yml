@@ -17,9 +17,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Set up Python with the default version for the workflow.
       - name: Set up Python
         uses: actions/setup-python@v5
 
       # Install Poetry to manage project dependencies and build the Python package.
       - name: Install Poetry
         run: pip install poetry
+
+      # Install the project dependencies using the locked versions from poetry.lock.
+      - name: Install dependencies
+        run: poetry install
