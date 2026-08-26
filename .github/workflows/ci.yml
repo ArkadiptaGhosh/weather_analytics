@@ -20,6 +20,8 @@ jobs:
       # Set up Python with the default version for the workflow.
       - name: Set up Python
         uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
       # Install Poetry to manage project dependencies and build the Python package.
       - name: Install Poetry
