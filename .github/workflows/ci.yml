@@ -19,3 +19,7 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v5
+
+      # Install Poetry to manage project dependencies and build the Python package.
+      - name: Install Poetry
+        run: pip install poetry
