@@ -13,6 +13,7 @@ jobs:
   validate:
     if: false
     runs-on: ubuntu-latest
+    environment: prod
 
     steps:
       # Check out the repository so the runner has access to the project source code.
