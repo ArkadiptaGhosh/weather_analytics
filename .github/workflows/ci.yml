@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod
 
+    env:
+      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+
     steps:
       # Check out the repository so the runner has access to the project source code.
       - name: Checkout repository
