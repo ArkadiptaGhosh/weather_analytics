@@ -15,8 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod
 
+    # Environment variables for Databricks API authentication.
+    # These secrets must be configured in the GitHub repository settings.
     env:
+      # Databricks OAuth service principal application ID for API authentication.
       DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+      # Databricks OAuth service principal application secret for API authentication.
       DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
 
     steps:
