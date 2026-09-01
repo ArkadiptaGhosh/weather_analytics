@@ -11,7 +11,7 @@ jobs:
   # Validate the project by running tests, building the package,
   # and checking the Databricks Asset Bundle configuration.
   validate:
-    if: false
+    # if: false  # Uncomment to disable this job
     runs-on: ubuntu-latest
     environment: prod
 
@@ -57,6 +57,12 @@ jobs:
       # Install the Databricks CLI so CI can validate the Databricks Asset Bundle.
       - name: Install Databricks CLI
         uses: databricks/setup-cli@main
+
+      
+      # Verify that the Databricks CLI can authenticate using the GitHub environment credentials.
+      # The actual client secret is never printed to the workflow log.
+      - name: Verify Databricks authentication
+        run: databricks auth describe
 
       # Validate the Databricks Asset Bundle configuration before deployment.
       - name: Validate Databricks Bundle
