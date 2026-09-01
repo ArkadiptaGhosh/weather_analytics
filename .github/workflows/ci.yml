@@ -9,7 +9,7 @@ on:
 
 jobs:
   # Validate the project by running tests, building the package,
-  # and checking the Databricks Asset Bundle configuration.
+  # and checking the Databricks Asset Bundle configuration...
   validate:
     # if: false  # Uncomment to disable this job
     runs-on: ubuntu-latest
