@@ -64,7 +64,7 @@ jobs:
       - name: Verify Databricks authentication
         run: databricks auth describe
 
-      # Validate the Databricks Asset Bundle configuration before deployment.
+      # Validate the Databricks Asset Bundle configuration before deployment...
       - name: Validate Databricks Bundle
         run: databricks bundle validate -t dev
 
