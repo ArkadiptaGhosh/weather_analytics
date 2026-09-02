@@ -88,7 +88,7 @@ targets:
     variables:
       catalog_name: weather_prod
       env: 'prod'
-      email_id: "arkadiptaghosh99@gmail.com"
+      email_id: "arkadiptaghosh81@gmail.com"
 
     workspace:
       root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
