@@ -2,20 +2,24 @@ name: CI
 
 on:
   pull_request:
-    # Run validation when a PR is opened, updated, reopened, or merged/closed.
-    types: [opened, synchronize, reopened, closed]
+    # Run validation when a PR is opened, updated, or reopened.
+    types: [opened, synchronize, reopened]
 
   push:
     branches:
       - dev
       - main
 
+
 jobs:
+
+  # ============================================================
+  # VALIDATION
+  # Runs for Pull Requests and pushes to dev/main.
+  # Does not use a GitHub Environment.
+  # ============================================================
   validate:
     runs-on: ubuntu-latest
-
-    # GitHub Environment used for Databricks authentication secrets.
-    environment: prod
 
     env:
       # Databricks OAuth service principal application ID.
@@ -77,12 +81,114 @@ jobs:
       #     databricks grants update catalog weather_dev \
       #       --json @permissions/uc_grants.json
 
-      # Deploy to DEV only when code is pushed to the dev branch.
+
+  # ============================================================
+  # DEV DEPLOYMENT
+  # Runs only when code is pushed to the dev branch.
+  # Uses the GitHub dev Environment.
+  # ============================================================
+  deploy-dev:
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+
+    runs-on: ubuntu-latest
+
+    environment: dev
+
+    env:
+      # Databricks OAuth service principal application ID.
+      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+
+      # Databricks OAuth service principal application secret.
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+
+    steps:
+      # Check out the repository.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Set up Python 3.11.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Install Poetry.
+      - name: Install Poetry
+        run: pip install poetry
+
+      # Install project dependencies.
+      - name: Install dependencies
+        run: poetry install
+
+      # Build the Python wheel.
+      - name: Build package
+        run: poetry build
+
+      # Install Databricks CLI.
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+
+      # Verify Databricks authentication.
+      - name: Verify Databricks authentication
+        run: databricks auth describe
+
+      # Deploy the Databricks Asset Bundle to DEV.
       - name: Deploy Databricks Bundle DEV
-        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         run: databricks bundle deploy -t dev
 
-      # Deploy to PROD only when code is pushed to the main branch.
+
+  # ============================================================
+  # PROD DEPLOYMENT
+  # Runs only when code is pushed to the main branch.
+  # Uses the GitHub prod Environment.
+  # ============================================================
+  deploy-prod:
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+
+    environment: prod
+
+    env:
+      # Databricks OAuth service principal application ID.
+      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+
+      # Databricks OAuth service principal application secret.
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+
+    steps:
+      # Check out the repository.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Set up Python 3.11.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Install Poetry.
+      - name: Install Poetry
+        run: pip install poetry
+
+      # Install project dependencies.
+      - name: Install dependencies
+        run: poetry install
+
+      # Build the Python wheel.
+      - name: Build package
+        run: poetry build
+
+      # Install Databricks CLI.
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+
+      # Verify Databricks authentication.
+      - name: Verify Databricks authentication
+        run: databricks auth describe
+
+      # Deploy the Databricks Asset Bundle to PROD.
       - name: Deploy Databricks Bundle PROD
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: databricks bundle deploy -t prod
