@@ -91,4 +91,4 @@ targets:
       email_id: "arkadiptaghosh81@gmail.com"
 
     workspace:
-      root_path: /Workspace/Production/Weather_Analytics_Project_PROD/.bundle/${bundle.name}
+      root_path: /Workspace/Production/Weather_Analytics_Project_PROD/.bundle/${bundle.name}/${bundle.target}
