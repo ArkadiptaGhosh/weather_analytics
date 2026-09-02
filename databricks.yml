@@ -58,7 +58,7 @@ permissions:
   - user_name: rajnil54.guha@gmail.com
     level: CAN_VIEW
 
-  - service_principal_name: weather-analytics-github-actions
+  - service_principal_name: 5023e704-57cc-43b4-aec7-4b4c434fefcc #weather-analytics-github-actions
     level: CAN_MANAGE
 
 targets:
