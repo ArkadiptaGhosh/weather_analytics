@@ -69,7 +69,7 @@ jobs:
         run: databricks bundle validate -t dev
 
 
-      - name: Apply Unity Catalog permissions
-        run: |
-          databricks grants update catalog weather_dev \
-            --json @permissions/uc_grants.json
+      # - name: Apply Unity Catalog permissions
+      #   run: |
+      #     databricks grants update catalog weather_dev \
+      #       --json @permissions/uc_grants.json
