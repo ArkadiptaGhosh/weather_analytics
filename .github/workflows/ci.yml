@@ -5,71 +5,82 @@ on:
 
   push:
     branches:
+      - dev
       - main
 
 jobs:
-  # Validate the project by running tests, building the package,
-  # and checking the Databricks Asset Bundle configuration...
   validate:
-    # if: false  # Uncomment to disable this job
     runs-on: ubuntu-latest
+
+    # GitHub Environment used for Databricks authentication secrets.
     environment: prod
 
-    # Environment variables for Databricks API authentication.
-    # These secrets must be configured in the GitHub repository settings.
     env:
-      # Databricks OAuth service principal application ID for API authentication.
+      # Databricks OAuth service principal application ID.
       DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
-      # Databricks OAuth service principal application secret for API authentication.
+
+      # Databricks OAuth service principal application secret.
       DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
 
     steps:
-      # Check out the repository so the runner has access to the project source code.
+      # Check out the repository.
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Set up Python 3.11 for a consistent CI environment.
+      # Set up Python 3.11.
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # Install Poetry to manage project dependencies and build the Python package.
+      # Install Poetry.
       - name: Install Poetry
         run: pip install poetry
 
-      # Install the project dependencies using the locked versions from poetry.lock.
+      # Install project dependencies.
       - name: Install dependencies
         run: poetry install
 
-      # Install pytest so the test runner is available in the CI environment.
+      # Install pytest.
       - name: Install pytest
         run: pip install pytest
 
-      # # Run the automated test suite to verify that code changes have not broken existing functionality.
+      # Run automated tests.
+      # Enable this when the project has tests ready.
       # - name: Run pytest
       #   run: poetry run pytest
 
-      # Build the Python wheel that will be packaged and deployed to Databricks.
+      # Build the Python wheel.
       - name: Build package
         run: poetry build
 
-      # Install the Databricks CLI so CI can validate the Databricks Asset Bundle.
+      # Install Databricks CLI.
       - name: Install Databricks CLI
         uses: databricks/setup-cli@main
 
-      
-      # Verify that the Databricks CLI can authenticate using the GitHub environment credentials.
-      # The actual client secret is never printed to the workflow log.
+      # Verify Databricks authentication.
       - name: Verify Databricks authentication
         run: databricks auth describe
 
-      # Validate the Databricks Asset Bundle configuration before deployment...
+      # Validate the Databricks Asset Bundle.
       - name: Validate Databricks Bundle
         run: databricks bundle validate -t dev
 
-
+      # Apply Unity Catalog permissions.
+      # Currently disabled because UC permissions are already configured.
+      # This is kept as a learning reference for future access-management CI/CD.
+      #
       # - name: Apply Unity Catalog permissions
       #   run: |
       #     databricks grants update catalog weather_dev \
       #       --json @permissions/uc_grants.json
+
+      # Deploy to DEV only when code is pushed to the dev branch.
+      - name: Deploy Databricks Bundle DEV
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        run: databricks bundle deploy -t dev
+
+      # Deploy to PROD only when code is pushed to the main branch.
+      - name: Deploy Databricks Bundle PROD
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: databricks bundle deploy -t prod
