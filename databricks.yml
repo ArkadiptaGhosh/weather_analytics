@@ -21,7 +21,6 @@ variables:
 
   global_execution_date:
     default: "{{job.start_time.iso_date}}"
-    
 
   email_id:
     description: "Email for notifications"
@@ -58,19 +57,21 @@ permissions:
   - user_name: rajnil54.guha@gmail.com
     level: CAN_VIEW
 
-  - service_principal_name: 5023e704-57cc-43b4-aec7-4b4c434fefcc #weather-analytics-github-actions
+  - service_principal_name: 5023e704-57cc-43b4-aec7-4b4c434fefcc # weather-analytics-github-actions
     level: CAN_MANAGE
+
 
 targets:
   dev:
     mode: development
+
     variables:
       catalog_name: weather_dev
       env: 'dev'
       email_id: ""
 
     workspace:
-      root_path: /Workspace/Development/Weather_Analytics_Project_DEV/.bundle/${bundle.name}/${bundle.target}
+      root_path: /Workspace/Development/Weather_Analytics_Project_DEV/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
 
     resources:
       jobs:
@@ -80,6 +81,7 @@ targets:
             quartz_cron_expression: "0 0 0,12 * * ?"
             timezone_id: "Asia/Kolkata"
             pause_status: "PAUSED"
+
 
   prod:
     mode: production
