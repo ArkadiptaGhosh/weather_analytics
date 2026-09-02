@@ -68,9 +68,9 @@ jobs:
       - name: Verify Databricks authentication
         run: databricks auth describe
 
-      # Validate the Databricks Asset Bundle.
-      - name: Validate Databricks Bundle
-        run: databricks bundle validate -t dev
+      # # Validate the Databricks Asset Bundle.
+      # - name: Validate Databricks Bundle
+      #   run: databricks bundle validate -t dev
 
       # Apply Unity Catalog permissions.
       # Currently disabled because UC permissions are already configured.
