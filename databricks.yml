@@ -75,7 +75,7 @@ targets:
     resources:
       jobs:
         weather_analytics_job:
-          name: wf_weather_analytics_job_dev
+          name: wf_weather_project_job_dev
           schedule:
             quartz_cron_expression: "0 0 0,12 * * ?"
             timezone_id: "Asia/Kolkata"

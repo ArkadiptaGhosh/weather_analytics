@@ -1,7 +1,7 @@
 resources:
   jobs:
     weather_analytics_job:
-      name: wf_weather_analytics_job_prod
+      name: wf_weather_project_job_prod
 
       parameters:
         - name: run_id
