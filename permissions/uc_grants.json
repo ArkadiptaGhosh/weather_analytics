@@ -1,0 +1,10 @@
+{
+    "changes": [
+        {
+            "principal": "5023e704-57cc-43b4-aec7-4b4c434fefcc",
+            "add": [
+                "USE_CATALOG"
+            ]
+        }
+    ]
+}

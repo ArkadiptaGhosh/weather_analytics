@@ -30,7 +30,7 @@ resources:
               layer: bronze
               bronze_catalogue: ${var.catalog_name}
               bronze_schema : ${var.bronze_schema}
-              bronze_table : weather_raw
+              bronze_table : ${var.bronze_table}
             
           environment_key: weather_environment
 
@@ -47,7 +47,7 @@ resources:
               bronze_table : ${var.bronze_table}
               silver_catalogue: ${var.catalog_name}
               silver_schema : ${var.silver_schema}
-              silver_table : weather_curated
+              silver_table : ${var.silver_table}
 
           environment_key: weather_environment
 
