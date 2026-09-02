@@ -91,4 +91,4 @@ targets:
       email_id: "arkadiptaghosh81@gmail.com"
 
     workspace:
-      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+      root_path: /Workspace/Production/.bundle/${bundle.name}
