@@ -80,6 +80,11 @@ targets:
       jobs:
         weather_analytics_job:
           name: wf_weather_project_job_dev
+
+          tags:
+            environment: dev
+            project: weather_analytics
+
           schedule:
             quartz_cron_expression: "0 0 0,12 * * ?"
             timezone_id: "Asia/Kolkata"
@@ -97,3 +102,12 @@ targets:
 
     workspace:
       root_path: /Workspace/Production/Weather_Analytics_Project_PROD/.bundle/${bundle.name}/${bundle.target}
+
+    resources:
+      jobs:
+        weather_analytics_job:
+          name: wf_weather_project_job_prod
+
+          tags:
+            environment: prod
+            project: weather_analytics
