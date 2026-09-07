@@ -11,8 +11,8 @@ resources:
 
 
       email_notifications:
-        on_success: 
-            - ${var.email_id}
+        # on_success: 
+        #     - ${var.email_id}
         on_failure: 
             - ${var.email_id}
 
