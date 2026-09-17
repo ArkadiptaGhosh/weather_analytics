@@ -25,3 +25,5 @@ def test_process_adds_ingestion_metadata():
     assert result["ingestion_source"] == "Open Weather API"
 
     assert result["city"] == "Bangalore"
+
+    assert result["current"]["temperature_2m"] == 28.5
