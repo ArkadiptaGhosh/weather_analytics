@@ -17,7 +17,7 @@ resources:
             - ${var.email_id}
 
       schedule:
-        quartz_cron_expression: "0 0 5 * * ?"
+        quartz_cron_expression: "0 0 13 * * ?"
         timezone_id: "Asia/Kolkata"
         pause_status: "UNPAUSED"
 
