@@ -47,14 +47,10 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      # Install pytest.
-      - name: Install pytest
-        run: pip install pytest
-
       # Run automated tests.
       # Enable this when the project has tests ready.
-      # - name: Run pytest
-      #   run: poetry run pytest
+      - name: Run pytest
+        run: poetry run pytest
 
       # Build the Python wheel.
       - name: Build package
