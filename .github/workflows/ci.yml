@@ -40,8 +40,8 @@ jobs:
           python-version: "3.11"
 
       # Install Poetry.
-      # - name: Install Poetry
-      #   run: pip install poetry
+      - name: Install Poetry
+        run: pip install poetry
 
       # Install project dependencies.
       - name: Install dependencies
@@ -166,8 +166,8 @@ jobs:
           python-version: "3.11"
 
       #  Install Poetry.
-      # - name: Install Poetry
-      #   run: pip install poetry
+      - name: Install Poetry
+        run: pip install poetry
 
       # Install project dependencies.
       - name: Install dependencies
