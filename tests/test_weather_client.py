@@ -1,6 +1,9 @@
 # Import the Python standard library and the WeatherClient dependency.
 from unittest.mock import patch
 
+import pytest
+import requests
+
 from weather_analytics.api.weather_client import WeatherClient
 
 
@@ -30,10 +33,6 @@ def test_get_current_weather(mock_get):
         longitude=88.3639
     )
 
-
-    # Assert: the request is made once and the returned payload matches the mock data.
-    # mock_get.assert_called_once()
-
     # Assert: the client sends the expected endpoint, query parameters, and timeout.
     mock_get.assert_called_once_with(
         "https://api.open-meteo.com/v1/forecast",
@@ -55,3 +54,25 @@ def test_get_current_weather(mock_get):
     assert result["current"]["wind_speed_10m"] == 12.3
     assert result["latitude"] == 22.5726
     assert result["longitude"] == 88.3639
+
+
+# Test: verify the client raises an HTTPError when the API returns an HTTP error.
+@patch("weather_analytics.api.weather_client.requests.get")
+def test_get_current_weather_http_error(mock_get):
+
+    # Arrange: make raise_for_status() simulate an HTTP 500 error.
+    mock_get.return_value.raise_for_status.side_effect = requests.exceptions.HTTPError(
+        "500 Server Error"
+    )
+
+    client = WeatherClient()
+
+    # Act + Assert:
+    # The API call should raise an HTTPError because raise_for_status()
+    # was configured to simulate an HTTP 500 response.
+    with pytest.raises(requests.exceptions.HTTPError):
+        client.get_current_weather(
+            city="Kolkata",
+            latitude=22.5726,
+            longitude=88.3639
+        )
