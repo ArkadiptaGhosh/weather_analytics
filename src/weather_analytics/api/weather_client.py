@@ -27,6 +27,7 @@ class WeatherClient:
             ]
         }
 
+
         response = requests.get(
             self.base_url,
             params=params,
