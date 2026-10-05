@@ -1,3 +1,5 @@
+import time
+
 import requests
 
 
@@ -8,6 +10,9 @@ class WeatherClient:
         """Initialize the Weather Client."""
 
         self.base_url = "https://api.open-meteo.com/v1/forecast"
+
+        self.max_attempts = 3
+        self.initial_backoff = 1  # seconds
 
     def get_current_weather(
         self,
@@ -27,22 +32,47 @@ class WeatherClient:
             ]
         }
 
+        for attempt in range(self.max_attempts):
+            try:
+                response = requests.get(
+                    self.base_url,
+                    params=params,
+                    timeout=30
+                )
 
-        response = requests.get(
-            self.base_url,
-            params=params,
-            timeout=30
-        )
+                response.raise_for_status()
 
-        response.raise_for_status()
+                weather_data = response.json()
+                weather_data["city"] = city
 
-        if response.status_code == 200:
-            weather_data = response.json()
+                return weather_data
 
-            weather_data["city"] = city
+            except requests.exceptions.HTTPError as exc:
+                status_code = (
+                    exc.response.status_code
+                    if exc.response is not None
+                    else None
+                )
 
-            return weather_data
+                retryable_status_codes = {500, 502, 503, 504}
 
-        raise Exception(
-            f"Weather API request failed with status code {response.status_code}"
-        )
+                if status_code not in retryable_status_codes:
+                    raise
+
+                if attempt == self.max_attempts - 1:
+                    raise
+
+                time.sleep(
+                    self.initial_backoff * (2 ** attempt)
+                )
+
+            except (
+                requests.exceptions.Timeout,
+                requests.exceptions.ConnectionError
+            ):
+                if attempt == self.max_attempts - 1:
+                    raise
+
+                time.sleep(
+                    self.initial_backoff * (2 ** attempt)
+                )
