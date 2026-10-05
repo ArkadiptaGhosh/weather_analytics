@@ -76,3 +76,26 @@ def test_get_current_weather_http_error(mock_get):
             latitude=22.5726,
             longitude=88.3639
         )
+
+
+
+
+@patch("weather_analytics.api.weather_client.requests.get")
+def test_get_current_weather_connection_error(mock_get):
+
+    # Arrange: simulate a connection failure while calling the Weather API.
+    mock_get.side_effect = requests.exceptions.ConnectionError(
+        "Unable to connect to Weather API"
+    )
+
+    client = WeatherClient()
+
+    # Act + Assert:
+    # The API call should raise a ConnectionError because the mock
+    # was configured to simulate a connection failure.
+    with pytest.raises(requests.exceptions.ConnectionError):
+        client.get_current_weather(
+            city="Kolkata",
+            latitude=22.5726,
+            longitude=88.3639
+        )
