@@ -132,6 +132,37 @@ def test_get_current_weather_timeout_retry_success(mock_get, mock_sleep):
     assert result["longitude"] == 88.3639
 
 
+# Test: verify the client raises Timeout after all retry attempts fail.
+@patch("weather_analytics.api.weather_client.time.sleep")
+@patch("weather_analytics.api.weather_client.requests.get")
+def test_get_current_weather_timeout_retry_exhausted(mock_get, mock_sleep):
+
+    # Arrange: make every API call fail with a Timeout.
+    mock_get.side_effect = requests.exceptions.Timeout(
+        "Request timed out"
+    )
+
+    client = WeatherClient()
+
+    # Act + Assert:
+    # The API call should raise Timeout after all retry attempts are exhausted.
+    with pytest.raises(requests.exceptions.Timeout):
+        client.get_current_weather(
+            city="Kolkata",
+            latitude=22.5726,
+            longitude=88.3639
+        )
+
+    # Assert: the API was attempted three times.
+    assert mock_get.call_count == 3
+
+    # Assert: exponential backoff used 1 second after the first failure
+    # and 2 seconds after the second failure.
+    mock_sleep.assert_any_call(1)
+    mock_sleep.assert_any_call(2)
+
+
+# Test: verify the client raises ConnectionError when the API cannot be reached.
 @patch("weather_analytics.api.weather_client.requests.get")
 def test_get_current_weather_connection_error(mock_get):
 
