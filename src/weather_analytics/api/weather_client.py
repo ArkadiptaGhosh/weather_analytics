@@ -46,6 +46,8 @@ class WeatherClient:
                 all retry attempts.
             requests.exceptions.HTTPError: If the API returns a non-retryable
                 HTTP error status.
+            requests.exceptions.JSONDecodeError: If the API response cannot be
+                decoded as valid JSON.
         """
 
         params = {
@@ -91,6 +93,9 @@ class WeatherClient:
                 time.sleep(
                     self.initial_backoff * (2 ** attempt)
                 )
+
+            except requests.exceptions.JSONDecodeError:
+                raise
 
             except (
                 requests.exceptions.Timeout,

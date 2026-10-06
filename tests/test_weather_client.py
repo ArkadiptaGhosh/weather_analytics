@@ -163,8 +163,9 @@ def test_get_current_weather_http_retry_success(mock_get, mock_sleep):
         successful_response
     ]
 
+    client = WeatherClient()
+
     # Act: call the weather API wrapper.
-    result = client = WeatherClient()
     result = client.get_current_weather(
         city="Kolkata",
         latitude=22.5726,
@@ -186,6 +187,45 @@ def test_get_current_weather_http_retry_success(mock_get, mock_sleep):
     assert result["current"]["wind_speed_10m"] == 12.3
     assert result["latitude"] == 22.5726
     assert result["longitude"] == 88.3639
+
+
+# Test: verify the client raises JSONDecodeError when the API response
+# contains invalid JSON.
+@patch("weather_analytics.api.weather_client.time.sleep")
+@patch("weather_analytics.api.weather_client.requests.get")
+def test_get_current_weather_invalid_json(mock_get, mock_sleep):
+
+    # Arrange: create a fake response with an HTTP 200 status.
+    mock_get.return_value.status_code = 200
+
+    # Create an exception that simulates invalid JSON in the API response.
+    json_error = requests.exceptions.JSONDecodeError(
+        "Invalid JSON",
+        "",
+        0
+    )
+
+    # Configure response.json() to raise JSONDecodeError.
+    mock_get.return_value.json.side_effect = json_error
+
+    client = WeatherClient()
+
+    # Act + Assert:
+    # The API call should raise JSONDecodeError because the response
+    # could not be decoded as valid JSON.
+    with pytest.raises(requests.exceptions.JSONDecodeError):
+        client.get_current_weather(
+            city="Kolkata",
+            latitude=22.5726,
+            longitude=88.3639
+        )
+
+    # Assert: invalid JSON is not retryable, so the API should be
+    # called only once.
+    assert mock_get.call_count == 1
+
+    # Assert: no retry delay should occur.
+    mock_sleep.assert_not_called()
 
 
 # Test: verify the client retries after timeouts and succeeds on a later attempt.
