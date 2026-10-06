@@ -69,7 +69,7 @@ def test_get_current_weather_http_error(mock_get):
 
     # Act + Assert:
     # The API call should raise an HTTPError because raise_for_status()
-    # was configured to simulate an HTTP 500 response.
+    # was configured to simulate a 500 response.
     with pytest.raises(requests.exceptions.HTTPError):
         client.get_current_weather(
             city="Kolkata",
@@ -78,6 +78,58 @@ def test_get_current_weather_http_error(mock_get):
         )
 
 
+# Test: verify the client retries after timeouts and succeeds on a later attempt.
+@patch("weather_analytics.api.weather_client.time.sleep")
+@patch("weather_analytics.api.weather_client.requests.get")
+def test_get_current_weather_timeout_retry_success(mock_get, mock_sleep):
+
+    # Arrange: create a fake successful response for the third attempt.
+    successful_response = mock_get.return_value
+
+    successful_response.status_code = 200
+
+    successful_response.json.return_value = {
+        "latitude": 22.5726,
+        "longitude": 88.3639,
+        "current": {
+            "temperature_2m": 28.5,
+            "relative_humidity_2m": 70,
+            "wind_speed_10m": 12.3
+        }
+    }
+
+    # Make the first two API calls fail with Timeout,
+    # and make the third API call return the successful response.
+    mock_get.side_effect = [
+        requests.exceptions.Timeout("Request timed out"),
+        requests.exceptions.Timeout("Request timed out"),
+        successful_response
+    ]
+
+    client = WeatherClient()
+
+    # Act: call the weather API wrapper.
+    result = client.get_current_weather(
+        city="Kolkata",
+        latitude=22.5726,
+        longitude=88.3639
+    )
+
+    # Assert: the API was attempted three times.
+    assert mock_get.call_count == 3
+
+    # Assert: exponential backoff used 1 second after the first failure
+    # and 2 seconds after the second failure.
+    mock_sleep.assert_any_call(1)
+    mock_sleep.assert_any_call(2)
+
+    # Assert: the third attempt eventually returned the expected data.
+    assert result["city"] == "Kolkata"
+    assert result["current"]["temperature_2m"] == 28.5
+    assert result["current"]["relative_humidity_2m"] == 70
+    assert result["current"]["wind_speed_10m"] == 12.3
+    assert result["latitude"] == 22.5726
+    assert result["longitude"] == 88.3639
 
 
 @patch("weather_analytics.api.weather_client.requests.get")
