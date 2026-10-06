@@ -4,10 +4,18 @@ import requests
 
 
 class WeatherClient:
-    """Client for communicating with the Weather API."""
+    """Client for retrieving current weather data from the Open-Meteo API.
+
+    The client manages the base API URL, retry configuration, and the request
+    flow used to fetch weather snapshots for a given city and coordinate pair.
+    """
 
     def __init__(self):
-        """Initialize the Weather Client."""
+        """Initialize the weather client configuration.
+
+        Sets the request endpoint and retry/backoff values used when fetching
+        weather data from the external API.
+        """
 
         self.base_url = "https://api.open-meteo.com/v1/forecast"
 
@@ -20,7 +28,25 @@ class WeatherClient:
         latitude: float,
         longitude: float
     ) -> dict:
-        """Fetch the current weather for a location."""
+        """Fetch the current weather for the provided location.
+
+        Args:
+            city: Human-readable city name to associate with the returned data.
+            latitude: Latitude of the location in decimal degrees.
+            longitude: Longitude of the location in decimal degrees.
+
+        Returns:
+            A dictionary containing the weather response payload from the API,
+            including the city name.
+
+        Raises:
+            requests.exceptions.Timeout: If the request times out after all retry
+                attempts.
+            requests.exceptions.ConnectionError: If the connection fails after
+                all retry attempts.
+            requests.exceptions.HTTPError: If the API returns a non-retryable
+                HTTP error status.
+        """
 
         params = {
             "latitude": latitude,
